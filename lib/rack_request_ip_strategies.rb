@@ -1,4 +1,5 @@
 require "rack_request_ip_strategies/version"
+require "rack_request_ip_strategies/proxy_filtering"
 require "rack_request_ip_strategies/base"
 require "rack_request_ip_strategies/remote_addr"
 require "rack_request_ip_strategies/x_forwarded_for"
