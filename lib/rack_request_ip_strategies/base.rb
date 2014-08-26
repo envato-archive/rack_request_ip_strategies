@@ -1,12 +1,12 @@
 module RackRequestIPStrategies
   class Base
-    def self.calculate(env, trusted_proxies = TrustedProxyDetector::DEFAULT_TRUSTED_PROXIES)
-      new(env, trusted_proxies).calculate
+    def self.calculate(env, config = Config.default)
+      new(env, config).calculate
     end
 
-    def initialize(env, trusted_proxies)
+    def initialize(env, config)
       @env = env
-      @trusted_proxies = trusted_proxies
+      @config = config
     end
 
     private
@@ -20,7 +20,7 @@ module RackRequestIPStrategies
     end
 
     def trusted_proxy?(ip)
-      TrustedProxyDetector.trusted_proxy?(ip, @trusted_proxies)
+      TrustedProxyDetector.trusted_proxy?(ip, @config.trusted_proxies)
     end
 
     def ips_from(header)

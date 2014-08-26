@@ -3,14 +3,14 @@ require 'ipaddr'
 module RackRequestIPStrategies
   class IPCalculator
     def initialize(config)
+      @config = config
       @strategies = config.strategies
-      @trusted_proxies = config.trusted_proxies
     end
 
     def calculate(env)
       ip = nil
       @strategies.each do |strategy|
-        ip = strategy.calculate(env, @trusted_proxies)
+        ip = strategy.calculate(env, @config)
         break if ip
       end
       ip
