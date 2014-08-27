@@ -1,7 +1,7 @@
 module RackRequestIPStrategies
   class Base
-    def self.calculate(env, config = Config.default)
-      new(env, config).calculate
+    def self.call(env, config = Config.default)
+      new(env, config).call
     end
 
     def initialize(env, config)

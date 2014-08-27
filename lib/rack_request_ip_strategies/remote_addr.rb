@@ -1,6 +1,6 @@
 module RackRequestIPStrategies
   class RemoteAddr < Base
-    def calculate
+    def call
       @env['REMOTE_ADDR']
     end
   end
