@@ -16,7 +16,7 @@ This gem provides a replacement implementation for `Rack::Request#ip` in order t
 
 Add this line to your application's Gemfile:
 
-    gem 'rack_request_ip_strategies'
+    gem 'rack_request_ip_strategies', require: 'rack_request_ip_strategies/patch_rack'
 
 Configure it:
 
