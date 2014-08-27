@@ -2,7 +2,7 @@ module RackRequestIPStrategies
   class ForwardingHeader < Base
     include ProxyFiltering
 
-    def calculate
+    def call
       filter_proxies_from('HTTP_X_FORWARDED_FOR').last
     end
   end

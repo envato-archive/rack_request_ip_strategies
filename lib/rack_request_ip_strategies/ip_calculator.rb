@@ -10,7 +10,7 @@ module RackRequestIPStrategies
     def calculate(env)
       ip = nil
       @strategies.each do |strategy|
-        ip = strategy.calculate(env, @config)
+        ip = strategy.call(env, @config)
         break if ip
       end
       ip

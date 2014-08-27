@@ -7,4 +7,17 @@ describe RackRequestIPStrategies do
       expect(RackRequestIPStrategies.calculate(env)).to eq '200.200.200.200'
     end
   end
+
+  it 'accepts custom strategies that respond to call' do
+    strategies = [
+      proc { |env| env['BLAH'] },
+      proc { |env, config| config.strategies.count }
+    ]
+    RackRequestIPStrategies.configure do |config|
+      allow(config).to receive(:strategies).and_return(strategies)
+    end
+
+    expect(RackRequestIPStrategies.calculate('BLAH' => '1')).to eq '1'
+    expect(RackRequestIPStrategies.calculate({})).to eq 2
+  end
 end

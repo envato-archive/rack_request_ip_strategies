@@ -34,14 +34,14 @@ Configure it:
 Define and use a custom strategy:
 
     class CustomStrategy
-      def self.calculate(env)
+      def self.call(env, config)
         env['HTTP_MY_SPECIAL_IP_HEADER']
       end
     end
 
     RackRequestIPStrategies.configure do |config|
       # Try each strategy from left to right and use the first non-nil value
-      config.strategies = [CustomStrategy, RackRequestIPStrategies::RemoteAddr]
+      config.strategies = [CustomStrategy, proc {|env| env['BLAH'] }, RackRequestIPStrategies::RemoteAddr]
     end
 
 ## Usage
