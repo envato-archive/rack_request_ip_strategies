@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = RackRequestIpStrategies::VERSION
   spec.authors       = ["Steve Hodgkiss"]
   spec.email         = ["steve@hodgkiss.me"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
+  spec.summary       = %q{Replacement for Rack::Request#ip}
   spec.description   = %q{TODO: Write a longer description. Optional.}
   spec.homepage      = ""
   spec.license       = "MIT"
