@@ -6,7 +6,7 @@ describe Rack::Request, '#ip patched' do
   end
 
   it 'calls our calculate method' do
-    env = double
+    env = {}
     request = Rack::Request.new(env)
     request.ip
     expect(RackRequestIPStrategies).to have_received(:calculate).with(env)

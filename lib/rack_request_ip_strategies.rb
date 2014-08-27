@@ -34,7 +34,9 @@ module RackRequestIPStrategies
     require "rack"
 
     Rack::Request.send(:define_method, :ip) do
-      RackRequestIPStrategies.calculate(@env)
+      @env.fetch("rack_request_ip_strategies.ip") do
+        @env["rack_request_ip_strategies.ip"] = RackRequestIPStrategies.calculate(@env)
+      end
     end
   end
 
