@@ -10,7 +10,9 @@ module RackRequestIPStrategies
   extend self
 
   class Config
-    attr_accessor :strategies, :trusted_proxies, :forwarding_header
+    attr_accessor :strategies,
+                  :trusted_proxies,
+                  :forwarding_header
 
     def self.default
       new.tap do |config|
