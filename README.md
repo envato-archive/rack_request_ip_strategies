@@ -1,10 +1,10 @@
 # RackRequestIPStrategies
 
-This gem provides a replacement for `Rack::Request#ip` to allow its behaviour to be customised to your deployment.
+This gem redefines `Rack::Request#ip` to allow the strategy used by your application to be configured based on your deployment setup. It also includes a bunch of fixes and improvements:
 
-- Prevents IP spoofing via `X-Forwarded-For` and `Client-IP` header manipulation. https://github.com/rack/rack/pull/705
-- Can be configured to prevent IP spoofing via the `X-Forwarded-For` header alone if you're not using a proxy.
-- Adds the ability to define additional trusted proxies using CIDR notation.
+- The default strategy prevents IP spoofing via `X-Forwarded-For` and `Client-IP` header manipulation. https://github.com/rack/rack/pull/705
+- Additional trusted proxies can be defined using CIDR notation.
+- Custom strategies can be defined if you're behind a proxy that uses a different header.
 
 ## Installation
 
