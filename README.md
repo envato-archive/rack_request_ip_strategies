@@ -31,7 +31,7 @@ Configure it:
       config.trusted_proxies += [IPAddr.new('199.27.128.0/21')]
     end
 
-Define and use a custom strategy:
+## Custom strategies
 
     class CustomStrategy
       def self.call(env, config)
@@ -42,6 +42,14 @@ Define and use a custom strategy:
     RackRequestIPStrategies.configure do |config|
       # Try each strategy from left to right and use the first non-nil value
       config.strategies = [CustomStrategy, proc {|env| env['BLAH'] }, RackRequestIPStrategies::RemoteAddr]
+    end
+
+## When no proxy is involved
+
+The default strategy assumes the `X-Forwarded-For` header is being set by a trusted proxy. If this is not the case then the application will be vulnerable to IP spoofing by clients setting that header. Overwrite the strategy to only use REMOTE_ADDR in this case.
+
+    RackRequestIPStrategies.configure do |config|
+      config.strategies = [RackRequestIPStrategies::RemoteAddr]
     end
 
 ## Usage
