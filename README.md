@@ -1,17 +1,10 @@
 # RackRequestIPStrategies
 
-This gem provides a replacement for `Rack::Request#ip` in order to allow its behaviour to be customized more easily.
+This gem provides a replacement for `Rack::Request#ip` to allow its behaviour to be customised to your deployment.
 
-## Why
-
-This is the combination of various patches we had been maintaining in our Rails app.
-
-- Prevents easy IP spoofing via `X-Forwarded-For` and `Client-IP` header manipulation. https://github.com/rack/rack/pull/705
-- Without patching `Rack::Request#trusted_proxy?`, there's no way to add additional trusted proxies.
-
-### Why not use Rails' `RemoteIP` middleware?
-
-- Most middleware and Rails' logger use `request.ip`.
+- Prevents IP spoofing via `X-Forwarded-For` and `Client-IP` header manipulation. https://github.com/rack/rack/pull/705
+- Can be configured to prevent IP spoofing via the `X-Forwarded-For` header alone if you're not using a proxy.
+- Adds the ability to define additional trusted proxies using CIDR notation.
 
 ## Installation
 
@@ -44,7 +37,7 @@ Configure it:
       config.strategies = [CustomStrategy, proc {|env| env['BLAH'] }, RackRequestIPStrategies::RemoteAddr]
     end
 
-## When no proxy is involved
+## When no trusted proxy is involved
 
 The default strategy assumes the `X-Forwarded-For` header is being set by a trusted proxy. If this is not the case then the application will be vulnerable to IP spoofing by clients setting that header. Overwrite the strategy to only use REMOTE_ADDR in this case.
 
