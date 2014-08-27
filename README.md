@@ -37,9 +37,9 @@ Configure it:
       config.strategies = [CustomStrategy, proc {|env| env['BLAH'] }, RackRequestIPStrategies::RemoteAddr]
     end
 
-## When no trusted proxy is involved
+## When a trusted proxy is not involved
 
-The default strategy assumes the `X-Forwarded-For` header is being set by a trusted proxy. If this is not the case then the application will be vulnerable to IP spoofing by clients setting that header. Overwrite the strategy to only use REMOTE_ADDR in this case.
+The default strategy assumes the `X-Forwarded-For` header is being set by a trusted proxy. If this is not the case then the application will be vulnerable to IP spoofing by clients setting that header. Overwrite the strategy to only use `REMOTE_ADDR` in this case.
 
     RackRequestIPStrategies.configure do |config|
       config.strategies = [RackRequestIPStrategies::RemoteAddr]
