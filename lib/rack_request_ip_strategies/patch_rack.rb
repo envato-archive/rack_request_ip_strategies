@@ -1,0 +1,3 @@
+require 'rack_request_ip_strategies'
+
+RackRequestIPStrategies.patch_rack
