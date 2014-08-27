@@ -20,7 +20,7 @@ module RackRequestIPStrategies
       return false if ip.include?('/')
       IPAddr.new(ip)
     rescue ArgumentError, IPAddr::InvalidAddressError
-      nil
+      false
     end
   end
 end
