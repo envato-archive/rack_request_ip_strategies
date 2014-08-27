@@ -2,7 +2,7 @@ require "rack_request_ip_strategies/version"
 require "rack_request_ip_strategies/proxy_filtering"
 require "rack_request_ip_strategies/base"
 require "rack_request_ip_strategies/remote_addr"
-require "rack_request_ip_strategies/x_forwarded_for"
+require "rack_request_ip_strategies/forwarding_header"
 require "rack_request_ip_strategies/ip_calculator"
 require "rack_request_ip_strategies/trusted_proxy_detector"
 
@@ -10,11 +10,12 @@ module RackRequestIPStrategies
   extend self
 
   class Config
-    attr_accessor :strategies, :trusted_proxies
+    attr_accessor :strategies, :trusted_proxies, :forwarding_header
 
     def self.default
       new.tap do |config|
-        config.strategies = [XForwardedFor, RemoteAddr]
+        config.forwarding_header = 'HTTP_X_FORWARDED_FOR'
+        config.strategies = [ForwardingHeader, RemoteAddr]
         config.trusted_proxies = TrustedProxyDetector::DEFAULT_TRUSTED_PROXIES
       end
     end

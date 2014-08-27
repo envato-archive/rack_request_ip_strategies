@@ -1,5 +1,5 @@
 module RackRequestIPStrategies
-  class XForwardedFor < Base
+  class ForwardingHeader < Base
     include ProxyFiltering
 
     def calculate
