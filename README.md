@@ -1,10 +1,11 @@
 # RackRequestIPStrategies
 
-This gem redefines `Rack::Request#ip` to allow the strategy used by your application to be configured based on your deployment setup. It also includes a bunch of fixes and improvements:
+The implementation of `Rack::Request#ip` has some issues:
 
-- The default strategy prevents IP spoofing via `X-Forwarded-For` and `Client-IP` header manipulation. https://github.com/rack/rack/pull/705
-- Additional trusted proxies can be defined using CIDR notation.
-- Custom strategies can be defined if you're behind a proxy that uses a different header.
+- The latest version (1.5.2) contains a vulnerability that allows easy IP spoofing via header manipulation. https://github.com/rack/rack/pull/705
+- There's no easy way to define additional trusted proxies.
+
+This gem redefines `Rack::Request#ip` to call `RackRequestIPStrategies.calculate(@env)`, which delegates to the chosen strategy. The `ForwardingHeader` strategy allows additional trusted proxies to be defined using CIDR notation, prioritising `REMOTE_ADDR` if it contains a non-trusted proxy.
 
 ## Installation
 
@@ -12,12 +13,15 @@ Add this line to your application's Gemfile:
 
     gem 'rack_request_ip_strategies', require: 'rack_request_ip_strategies/patch_rack'
 
-Configure it:
+## Configuration
 
-    RackRequestIPStrategies.configure do |config|
+By default the gem uses the `ForwardingHeader` strategy configured with the `X-Forwarded-For` header.
+
+    RackRequestIPStrategies.strategy = RackRequestIPStrategies::ForwardingHeader
+
+    RackRequestIPStrategies::ForwardingHeader.configure do |config|
       # defaults
-      config.forwarding_header = 'HTTP_X_FORWARDED_FOR'
-      config.strategies = [ForwardingHeader, RemoteAddr]
+      config.header = 'HTTP_X_FORWARDED_FOR'
       config.trusted_proxies = TrustedProxyDetector::DEFAULT_TRUSTED_PROXIES
 
       # Add additional trusted proxies
@@ -27,29 +31,18 @@ Configure it:
 ## Custom strategies
 
     class CustomStrategy
-      def self.call(env, config)
+      def self.call(env)
         env['HTTP_MY_SPECIAL_IP_HEADER']
       end
     end
 
-    RackRequestIPStrategies.configure do |config|
-      # Try each strategy from left to right and use the first non-nil value
-      config.strategies = [CustomStrategy, proc {|env| env['BLAH'] }, RackRequestIPStrategies::RemoteAddr]
-    end
+    RackRequestIPStrategies.strategy = CustomStrategy
 
-## When a trusted proxy is not involved
+## Standalone usage
 
-The default strategy assumes the `X-Forwarded-For` header is being set by a trusted proxy. If this is not the case then the application will be vulnerable to IP spoofing by clients setting that header. Overwrite the strategy to only use `REMOTE_ADDR` in this case.
-
-    RackRequestIPStrategies.configure do |config|
-      config.strategies = [RackRequestIPStrategies::RemoteAddr]
-    end
-
-## Usage
-
-    # Standalone usage
     env = { 'HTTP_X_FORWARDED_FOR' => '200.200.200.200, 192.168.0.10', 'REMOTE_ADDR' => '192.168.0.10' }
     RackRequestIPStrategies.calculate(env)
+    => "200.200.200.200"
 
 ## Contributing
 

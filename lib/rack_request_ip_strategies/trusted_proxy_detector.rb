@@ -1,3 +1,5 @@
+require 'ipaddr'
+
 module RackRequestIPStrategies
   class TrustedProxyDetector
     DEFAULT_TRUSTED_PROXIES = [
