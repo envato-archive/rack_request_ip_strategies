@@ -1,7 +1,7 @@
 module RackRequestIPStrategies
-  class RemoteAddr < Base
-    def call
-      @env['REMOTE_ADDR']
+  class RemoteAddr
+    def self.call(env)
+      env['REMOTE_ADDR']
     end
   end
 end

@@ -9,19 +9,8 @@ describe RackRequestIPStrategies do
   end
 
   it 'accepts custom strategies that respond to call' do
-    RackRequestIPStrategies.configure do |config|
-      @previous_strategies = config.strategies
-      config.strategies = [
-        proc { |env| env['BLAH'] },
-        proc { |env, config| config.strategies.count }
-      ]
-    end
+    allow(RackRequestIPStrategies).to receive(:strategy).and_return(proc { |env| env['BLAH'] })
 
     expect(RackRequestIPStrategies.calculate('BLAH' => '1')).to eq '1'
-    expect(RackRequestIPStrategies.calculate({})).to eq 2
-
-    RackRequestIPStrategies.configure do |config|
-      config.strategies = @previous_strategies
-    end
   end
 end
