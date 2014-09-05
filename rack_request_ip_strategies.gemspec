@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Steve Hodgkiss"]
   spec.email         = ["steve@hodgkiss.me"]
   spec.summary       = %q{Replacement for Rack::Request#ip}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.description   = spec.summary
   spec.homepage      = ""
   spec.license       = "MIT"
 
