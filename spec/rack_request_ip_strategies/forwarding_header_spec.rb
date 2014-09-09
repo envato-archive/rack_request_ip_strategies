@@ -7,6 +7,11 @@ describe RackRequestIPStrategies::ForwardingHeader do
     expect(RackRequestIPStrategies::ForwardingHeader.call(env)).to eq '100.100.100.100'
   end
 
+  it 'falls back to REMOTE_ADDR' do
+    env = { 'REMOTE_ADDR' => '127.0.0.1' }
+    expect(RackRequestIPStrategies::ForwardingHeader.call(env)).to eq '127.0.0.1'
+  end
+
   it 'takes the last IP after filtering known proxies' do
     env = { 'HTTP_X_FORWARDED_FOR' => '100.100.100.100, 192.168.0.10' }
     expect(RackRequestIPStrategies::ForwardingHeader.call(env)).to eq '100.100.100.100'

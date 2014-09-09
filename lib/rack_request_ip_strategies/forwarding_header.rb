@@ -31,10 +31,11 @@ module RackRequestIPStrategies
 
     def call
       # Give priority to REMOTE_ADDR if it's a non-trusted proxy
-      remote_addr = filter_proxies_from('REMOTE_ADDR').last
+      non_trusted_remote_addr = filter_proxies_from('REMOTE_ADDR').last
 
-      # Return the IP after the last trusted proxy in the forwarding header
-      remote_addr || filter_proxies_from(@config.header).last
+      forwarding_header = filter_proxies_from(@config.header).last
+
+      non_trusted_remote_addr || forwarding_header || @env['REMOTE_ADDR']
     end
 
     private
